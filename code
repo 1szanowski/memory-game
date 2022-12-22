@@ -1,0 +1,120 @@
+const cardArray = [
+{
+    name: "fries",
+    img: "./images2/fries.png"
+},
+{
+    name: "cheeseburger",
+    img: "./images2/cheeseburger.jpeg"
+},
+{
+    name: "hotdog",
+    img: "./images2/hotdog.png"
+},
+{
+    name: "ice-cream",
+    img: "./images2/icecream.jpg"
+},
+{
+    name: "milkshake",
+    img: "./images2/milkshake.png"
+},
+{
+    name: "pizza",
+    img: "./images2/pizza.png"
+},
+{
+    name: "fries",
+    img: "./images2/fries.png"
+},
+{
+    name: "cheeseburger",
+    img: "./images2/cheeseburger.jpeg"
+},
+{
+    name: "hotdog",
+    img: "./images2/hotdog.png"
+},
+{
+    name: "ice-cream",
+    img: "./images2/icecream.jpg"
+},
+{
+    name: "milkshake",
+    img: "./images2/milkshake.png"
+},
+{
+    name: "pizza",
+    img: "./images2/pizza.png"
+},
+];
+cardArray.sort(() => 0.5 - Math.random());// sorting card obj tested all fine
+//taking the id <div id="grid"></div> to manipulate
+const gridDisplay = document.querySelector("#grid") //// doc - all doc , queryselector - method, find the id
+const resultDisplay = document.querySelector("#result")
+
+
+let cardsChosen = []; /// creatin empty arr for choice;
+let cardsChosenIds = [];
+let cardsWon = [];
+
+function createBoard () { ///create the board with 9 symbols
+    for (let i = 0; i < cardArray.length; i++) {
+        const card = document.createElement("img");
+        card.setAttribute("src", "./images2/blank.png")
+        card.setAttribute("data-id", i);
+        card.addEventListener("click", clickCard); // callback
+        gridDisplay.appendChild(card);
+
+    }
+}
+createBoard();
+//check match
+function checkMatch () {
+  const cards =  document.querySelectorAll("img");
+  const optionOneId = cardsChosenIds[0];
+  const optionTwoId = cardsChosenIds[1];
+console.log("check for match");
+if (optionOneId === optionTwoId) {
+    cards[optionOneId].setAttribute("src", "./images2/blank.png");
+    cards[optionTwoId].setAttribute("src", "./images2/blank.png");
+    alert("You have clicked the same image!")
+}
+else if (cardsChosen[0] === cardsChosen[1]) {
+    alert ("You found a match!");
+    cards[optionOneId].setAttribute("src", "./images2/match.jpg");
+    cards[optionTwoId].setAttribute("src", "./images2/match.jpg");
+    cards[optionOneId].removeEventListener("click", clickCard);
+    cards[optionTwoId].removeEventListener("click", clickCard);
+    
+    cardsWon.push(cardsChosen);
+} else {
+    cards[optionOneId].setAttribute("src", "./images2/blank.png");
+    cards[optionTwoId].setAttribute("src", "./images2/blank.png");
+    alert ("Sorry, try again!")
+}
+resultDisplay.innerHTML = cardsWon.length;
+cardsChosen = [];
+cardsChosenIds = [];
+if (cardsWon.length == cardArray.length /2) {
+    resultDisplay.innerHTML = "Congratulations! You win!"
+}
+}
+
+
+
+///clicking realise
+
+function clickCard () {
+    //console.log(cardArray)
+  const cardId =   this.getAttribute("data-id");
+  
+  cardsChosen.push(cardArray[cardId].name);
+  cardsChosenIds.push(cardId);
+console.log(cardsChosen);
+console.log(cardsChosenIds);
+this.setAttribute("src", cardArray[cardId].img);
+if (cardsChosen.length === 2) {
+    setTimeout(checkMatch, 500)
+}
+}
